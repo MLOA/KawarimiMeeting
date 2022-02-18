@@ -20,7 +20,7 @@
     }
   ],
   "web_accessible_resources": [
-    "main.js",
+    "main.js"
   ],
   "permissions": [
     "tabs",
