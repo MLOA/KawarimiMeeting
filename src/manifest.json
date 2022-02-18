@@ -22,7 +22,6 @@
     "main.js"
   ],
   "permissions": [
-    "tabs",
-    "<all_urls>"
+    "tabs"
   ]
 }
