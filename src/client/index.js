@@ -1,15 +1,15 @@
 window.onload = () => {
-  const videoElement = document.createElement('video')
-  videoElement.classList.add('src');
-  videoElement.src = chrome.extension.getURL("sample.mp4");
-  videoElement.autoplay = true;
-  videoElement.muted = true;
-  videoElement.loop = true;
-  videoElement.style = 'display: none';
-
-  document.body.insertBefore(videoElement, document.body.lastChild)
-
-  document.querySelector('video.src').play();
+  // const videoElement = document.createElement('video')
+  // videoElement.classList.add('src');
+  // videoElement.src = chrome.extension.getURL("sample.mp4");
+  // videoElement.src = "https://tsukuaso.salmoncode.com/sample.mp4";
+  // videoElement.src = "https://samplelib.com/lib/preview/mp4/sample-5s.mp4";
+  // videoElement.autoplay = true;
+  // videoElement.muted = true;
+  // videoElement.loop = true;
+  // videoElement.style = 'display: none';
+  // document.body.insertBefore(videoElement, document.body.lastChild)
+  // document.querySelector('video.src').play();
 
   const script = document.createElement("script");
   script.setAttribute("type", "module");
