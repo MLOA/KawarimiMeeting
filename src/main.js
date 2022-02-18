@@ -107,7 +107,12 @@ navigator.mediaDevices.enumerateDevices = async function () {
   return devices
 }
 
-const transitButton = document.querySelector(".transit-button");
-transitButton.addEventListener('click', () => {
-  console.log('main: transitButton');
+const transitStartRecButton = document.querySelector(".transit-start-rec");
+transitStartRecButton.addEventListener('click', () => {
+  console.log('main: transitStartRecButton');
+})
+
+const transitEndRecButton = document.querySelector(".transit-end-rec");
+transitEndRecButton.addEventListener('click', () => {
+  console.log('main: transitEndRecButton');
 })
