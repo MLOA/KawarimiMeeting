@@ -1,3 +1,9 @@
+/**
+ * みがわり地蔵
+ * index.js
+ * Copyright © 2022 意識中くらい. All rights reserved.
+ */
+
 window.onload = () => {
   const script = document.createElement("script");
   script.setAttribute("type", "module");
@@ -42,6 +48,6 @@ window.onload = () => {
       const defaultDevice = deviceList[deviceList.length -2]
       // document.querySelectorAll('.video-option-menu > button')[0].click()
       defaultDevice.click();
-    } 
+    }
   });
 };

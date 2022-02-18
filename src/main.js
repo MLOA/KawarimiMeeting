@@ -1,8 +1,17 @@
+/**
+ * みがわり地蔵
+ * main.js
+ * Copyright © 2022 意識中くらい. All rights reserved.
+ */
+
 let recordedChunks = [];
 let mediaRecorder;
 let streamToRecord;
 let videoElement;
 
+/* 録画 */
+
+// MediaRecorderによる録画の設定と開始
 const startRecording = () => {
   console.log('startRecording')
   const options = { mimeType: "video/webm; codecs=vp9" };
@@ -16,6 +25,7 @@ const startRecording = () => {
   mediaRecorder.start(100);
 }
 
+// 録画の終了処理
 const stopRecording = () => {
   if(mediaRecorder == null || mediaRecorder == undefined) return;
   console.log('stopRecording')
@@ -23,11 +33,9 @@ const stopRecording = () => {
   mediaRecorder = null;
 }
 
-const createRecordedStream = () => {
-  console.log("createRecordedStream");
-  return videoElement.captureStream();
-}
+/* 出力・再生 */
 
+// 録画した動画をvideoタグに出力
 const attachVideo = () => {
   console.log("attachVideo start");
   const blob = new Blob([...recordedChunks], { type: "video/webm" });
@@ -40,12 +48,42 @@ const attachVideo = () => {
   videoElement.style.display = 'none';
   videoElement.src = url;
   document.body.insertBefore(videoElement, document.body.lastChild)
-  videoElement.play().then(() => {
-    recordedChunks = [];
-  });
   console.log("attachVideo end");
 }
 
+// videoタグをループ再生し、MediaStreamを取得
+const createRecordedStream = async () => {
+  console.log("createRecordedStream");
+  await videoElement.play()
+  recordedChunks = [];
+  return videoElement.captureStream();
+}
+
+
+/* MediaDevices系 */
+
+// 仮想デバイスの追加
+const addEnumerateDevice = () => {
+  const _enumerateDevices = navigator.mediaDevices.enumerateDevices.bind(
+    navigator.mediaDevices
+  );
+
+  navigator.mediaDevices.enumerateDevices = async function () {
+    const devices = await _enumerateDevices()
+
+    const virtualDevice = {
+      groupId: "default",
+      deviceId: "virtual",
+      kind: "videoinput",
+      label: "††† かわりみ地蔵 †††",
+    }
+    devices.push({ ...virtualDevice, toJSON: () => ({ ...virtualDevice }) });
+
+    return devices;
+  }
+}
+
+// 仮想デバイスの判定
 const isVirtualDevice = (video) => {
   if (!video || video === true || !video.deviceId) return false;
 
@@ -57,67 +95,46 @@ const isVirtualDevice = (video) => {
   return deviceId === "virtual";
 };
 
+// getUserMediaの書き換え
 const _getUserMedia = navigator.mediaDevices.getUserMedia.bind(navigator.mediaDevices);
-
-navigator.mediaDevices.getUserMedia = async function (constraints) {
+navigator.mediaDevices.getUserMedia = async (constraints) => {
   console.count("getUserMedia", constraints);
-  // 仮想デバイスでなければ、元々のAPI(普通のカメラ)を実行する&録画をつねに回しておく
+  // 仮想デバイスでなければ、元々のgetUserMediaを実行
   if (!constraints || !isVirtualDevice(constraints.video)) {
     const stream = await _getUserMedia(constraints);
     if(constraints && constraints.video) {
+      // ビデオキャプチャデバイスの場合、録画時の対象としてstreamを保持しておく
       streamToRecord = stream;
     }
-    return stream
+    return stream;
   }
 
-  // 仮想デバイスの場合、ループ映像を返す
-  const stream = createRecordedStream()
+  // 仮想デバイスの場合、録画した映像を返す
+  const stream = await createRecordedStream()
   return new Promise((res) => {
-    stream.onactive = () => {
-      res(stream)
-    }
-  })
+    stream.onactive = () => res(stream)
+  });
 };
 
-let deviceAdded = false;
-const addEnumerateDevice = () => {
-  // 元々の`enumerateDevices()`を保持しておく
-  const _enumerateDevices = navigator.mediaDevices.enumerateDevices.bind(
-    navigator.mediaDevices
-  );
+/* IFの設定 */
 
-  // `enumerateDevices()`を上書きする
-  navigator.mediaDevices.enumerateDevices = async function () {
-    // 使用できるデバイス(マイク・カメラなど)を取得する
-    const devices = await _enumerateDevices()
-
-    // 仮想デバイスの情報を定義
-    const virtualDevice = {
-      groupId: "default",
-      deviceId: "virtual",
-      kind: "videoinput",
-      label: "Loop!!!",
-    }
-
-    // 仮想デバイスを追加する
-    devices.push({ ...virtualDevice, toJSON: () => ({ ...virtualDevice }) });
-
-    return devices;
-  }
-
-  deviceAdded = true;
-}
-
+// 録画開始ボタンへリスナの登録
 const transitStartRecButton = document.querySelector(".transit-start-rec");
 transitStartRecButton.addEventListener('click', () => {
   console.log('main: transitStartRecButton');
   startRecording();
 });
 
+// 録画停止ボタンへリスナの登録
+let deviceAdded = false;
 const transitEndRecButton = document.querySelector(".transit-end-rec");
 transitEndRecButton.addEventListener('click', () => {
   console.log('main: transitEndRecButton');
   stopRecording();
   attachVideo();
-  if(!deviceAdded) addEnumerateDevice();
+  if(!deviceAdded) {
+    // 一度でも録画を行ったら、仮想デバイスを追加する
+    addEnumerateDevice();
+    deviceAdded = true;
+  }
 });

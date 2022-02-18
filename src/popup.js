@@ -1,3 +1,9 @@
+/**
+ * みがわり地蔵
+ * popup.js
+ * Copyright © 2022 意識中くらい. All rights reserved.
+ */
+
 let isRecording = false;
 
 const recordButtonText = ["Start Record", "Recording..."];
@@ -6,13 +12,13 @@ const recordButton = document.querySelector(".record");
 recordButton.addEventListener("click", (ev) => {
   chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
     const sendData = {
-      actionType: isRecording ? "start-rec" : "end-rec",
+      actionType: isRecording ? "end-rec" : "start-rec",
     };
     chrome.tabs.sendMessage(tabs[0].id, sendData);
+    isRecording = !isRecording;
     recordButton.textContent = isRecording
       ? recordButtonText[1]
       : recordButtonText[0];
-    isRecording = !isRecording;
   });
 });
 
