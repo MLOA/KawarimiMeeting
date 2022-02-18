@@ -6,20 +6,36 @@
 
 let isRecording = false;
 
-const recordButtonText = ["Start Record", "Recording..."];
+const ACTION_TYPE = { START_REC: "start-rec", END_REC: "end-rec" };
 
-const recordButton = document.querySelector(".record");
-recordButton.addEventListener("click", (ev) => {
+const sendData = (actionType) => {
   chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-    const sendData = {
-      actionType: isRecording ? "end-rec" : "start-rec",
-    };
-    chrome.tabs.sendMessage(tabs[0].id, sendData);
-    isRecording = !isRecording;
-    recordButton.textContent = isRecording
-      ? recordButtonText[1]
-      : recordButtonText[0];
+    chrome.tabs.sendMessage(tabs[0].id, { actionType});
   });
+}
+
+const recordButton = document.querySelector(".circle");
+const indicator = document.querySelector(".indicator");
+const preview = document.querySelector(".preview-area");
+
+recordButton.addEventListener("click", (ev) => {
+  isRecording = !isRecording;
+
+  if (isRecording) {
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+      sendData(ACTION_TYPE.START_REC)
+    });
+    indicator.classList.remove("stopping");
+    indicator.classList.add("recording");
+    preview.style.display = "none";
+  } else {
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+      sendData(ACTION_TYPE.END_REC)
+    });
+    indicator.classList.remove("recording");
+    indicator.classList.add("stopping");
+    preview.style.display = "initial";
+  }
 });
 
 document.querySelector(".video-play").addEventListener("click", (ev) => {
