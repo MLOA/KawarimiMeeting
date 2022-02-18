@@ -11,4 +11,9 @@ window.onload = () => {
   head.insertBefore(script, head.lastChild);
 
   document.body.insertBefore(script, document.body.lastChild)
+
+  chrome.runtime.onMessage.addListener((request, sender) => {
+    console.log('呼び出されたわ！受信したデータは', request.data);
+    //何かの処理
+  });
 }

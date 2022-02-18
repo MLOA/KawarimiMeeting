@@ -26,3 +26,12 @@ document.querySelector("#folder").addEventListener("change", ev => {
     fileReader.readAsDataURL(file);
   }
 });
+
+
+document.querySelector("#ping").addEventListener("click", ev => {
+  const send_data = { type: 'fugafuga', data: 'hogehoge' };
+  chrome.tabs.query({ active: true, currentWindow: true }, aim_message);
+  function aim_message(tabs) {
+    chrome.tabs.sendMessage(tabs[0].id, send_data);
+  }
+});
