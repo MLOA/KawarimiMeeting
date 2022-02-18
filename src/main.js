@@ -1,5 +1,6 @@
 let recordedChunks = [];
 let mediaRecorder;
+let streamToRecord;
 
 const videoElement = document.createElement('video');
 videoElement.autoplay = true;
@@ -9,10 +10,10 @@ videoElement.style.display = 'none';
 
 document.body.insertBefore(videoElement, document.body.lastChild)
 
-const startRecording = (stream) => {
+const startRecording = () => {
   console.log('startRecording')
   const options = { mimeType: "video/webm; codecs=vp9" };
-  mediaRecorder = new MediaRecorder(stream, options);
+  mediaRecorder = new MediaRecorder(streamToRecord, options);
   mediaRecorder.ondataavailable = (event) => {
     console.log("data-available");
     if (event.data.size > 0) {
@@ -30,22 +31,15 @@ const stopRecording = () => {
 
 const createRecordedStream = () => {
   console.log("createRecordedStream");
+  return videoElement.captureStream();
+}
+
+const attachVideo = () => {
   const blob = new Blob([...recordedChunks], { type: "video/webm" });
   const url = URL.createObjectURL(blob);
 
   videoElement.src = url;
   videoElement.play();
-  return videoElement.captureStream();
-}
-
-const download = (url) => {
-  var a = document.createElement("a");
-  document.body.appendChild(a);
-  a.style = "display: none";
-  a.href = url;
-  a.download = "test.webm";
-  a.click();
-  window.URL.revokeObjectURL(url);
 }
 
 const isVirtualDevice = (video) => {
@@ -67,13 +61,11 @@ navigator.mediaDevices.getUserMedia = async function (constraints) {
   if (!constraints || !isVirtualDevice(constraints.video)) {
     const stream = await _getUserMedia(constraints);
     if(constraints && constraints.video) {
-      recordedChunks = [];
-      startRecording(stream);
+      streamToRecord = stream;
     }
     return stream
   }
 
-  stopRecording();
   // 仮想デバイスの場合、ループ映像を返す
   const stream = createRecordedStream()
   return new Promise((res) => {
@@ -102,17 +94,21 @@ navigator.mediaDevices.enumerateDevices = async function () {
   }
 
   // 仮想デバイスを追加する
-  devices.push({ ...virtualDevice, toJSON: () => ({ ...virtualDevice }) })
+  devices.push({ ...virtualDevice, toJSON: () => ({ ...virtualDevice }) });
 
-  return devices
+  return devices;
 }
 
 const transitStartRecButton = document.querySelector(".transit-start-rec");
 transitStartRecButton.addEventListener('click', () => {
   console.log('main: transitStartRecButton');
-})
+  startRecording();
+});
 
 const transitEndRecButton = document.querySelector(".transit-end-rec");
 transitEndRecButton.addEventListener('click', () => {
   console.log('main: transitEndRecButton');
-})
+  stopRecording();
+  attachVideo();
+  recordedChunks = [];
+});
