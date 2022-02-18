@@ -1,4 +1,4 @@
-const recordedChunks = [];
+let recordedChunks = [];
 let mediaRecorder;
 
 const videoElement = document.createElement('video');
@@ -26,7 +26,7 @@ const stopRecording = () => {
 
 const createRecordedStream = () => {
   console.log("createRecordedStream");
-  const blob = new Blob(recordedChunks, { type: "video/webm" });
+  const blob = new Blob([...recordedChunks], { type: "video/webm" });
   const url = URL.createObjectURL(blob);
 
   videoElement.src = url;
@@ -76,6 +76,7 @@ navigator.mediaDevices.getUserMedia = async function (constraints) {
   if (!constraints || !isVirtualDevice(constraints.video)) {
     const stream = await _getUserMedia(constraints);
     if(constraints && constraints.video) {
+      recordedChunks = [];
       startRecording(stream);
     }
     return stream
