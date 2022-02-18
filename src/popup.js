@@ -1,12 +1,18 @@
-document.querySelector(".start-rec").addEventListener("click", (ev) => {
-  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-    chrome.tabs.sendMessage(tabs[0].id, { actionType: "start-rec" });
-  });
-});
+let isRecording = false;
 
-document.querySelector(".end-rec").addEventListener("click", (ev) => {
+const recordButtonText = ["Start Record", "Recording..."];
+
+const recordButton = document.querySelector(".record");
+recordButton.addEventListener("click", (ev) => {
   chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-    chrome.tabs.sendMessage(tabs[0].id, { actionType: "end-rec" });
+    const sendData = {
+      actionType: isRecording ? "start-rec" : "end-rec",
+    };
+    chrome.tabs.sendMessage(tabs[0].id, sendData);
+    recordButton.textContent = isRecording
+      ? recordButtonText[1]
+      : recordButtonText[0];
+    isRecording = !isRecording;
   });
 });
 
