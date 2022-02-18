@@ -1,2 +1,3 @@
+src/client/node_modules
 src/server/node_modules
 src/server/npm-debug.log
