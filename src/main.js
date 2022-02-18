@@ -1,21 +1,14 @@
 let recordedChunks = [];
 let mediaRecorder;
 let streamToRecord;
-
-const videoElement = document.createElement('video');
-videoElement.autoplay = true;
-videoElement.muted = true;
-videoElement.loop = true;
-videoElement.style.display = 'none';
-
-document.body.insertBefore(videoElement, document.body.lastChild)
+let videoElement;
 
 const startRecording = () => {
   console.log('startRecording')
   const options = { mimeType: "video/webm; codecs=vp9" };
   mediaRecorder = new MediaRecorder(streamToRecord, options);
   mediaRecorder.ondataavailable = (event) => {
-    console.log("data-available");
+    console.log("data-available", recordedChunks);
     if (event.data.size > 0) {
       recordedChunks.push(event.data);
     }
@@ -24,9 +17,10 @@ const startRecording = () => {
 }
 
 const stopRecording = () => {
-  if(!mediaRecorder) return;
+  if(mediaRecorder == null || mediaRecorder == undefined) return;
   console.log('stopRecording')
   mediaRecorder.stop();
+  mediaRecorder = null;
 }
 
 const createRecordedStream = () => {
@@ -35,11 +29,21 @@ const createRecordedStream = () => {
 }
 
 const attachVideo = () => {
+  console.log("attachVideo start");
   const blob = new Blob([...recordedChunks], { type: "video/webm" });
   const url = URL.createObjectURL(blob);
-
+  console.log(url)
+  videoElement = document.createElement('video');
+  videoElement.autoplay = true;
+  videoElement.muted = true;
+  videoElement.loop = true;
+  videoElement.style.display = 'none';
   videoElement.src = url;
-  videoElement.play();
+  document.body.insertBefore(videoElement, document.body.lastChild)
+  videoElement.play().then(() => {
+    recordedChunks = [];
+  });
+  console.log("attachVideo end");
 }
 
 const isVirtualDevice = (video) => {
@@ -110,5 +114,4 @@ transitEndRecButton.addEventListener('click', () => {
   console.log('main: transitEndRecButton');
   stopRecording();
   attachVideo();
-  recordedChunks = [];
 });
