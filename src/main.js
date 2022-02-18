@@ -2,6 +2,11 @@ let recordedChunks = [];
 let mediaRecorder;
 
 const videoElement = document.createElement('video');
+videoElement.autoplay = true;
+videoElement.muted = true;
+videoElement.loop = true;
+videoElement.style.display = 'none';
+
 document.body.insertBefore(videoElement, document.body.lastChild)
 
 const startRecording = (stream) => {
@@ -12,7 +17,6 @@ const startRecording = (stream) => {
     console.log("data-available");
     if (event.data.size > 0) {
       recordedChunks.push(event.data);
-      console.log("data-available");
     }
   };
   mediaRecorder.start(3000);
@@ -30,21 +34,8 @@ const createRecordedStream = () => {
   const url = URL.createObjectURL(blob);
 
   videoElement.src = url;
-  videoElement.classList.add('salmon');
-  videoElement.width = 300;
-  videoElement.autoplay = true;
-  videoElement.muted = true;
-  videoElement.loop = true;
-  videoElement.style.position = 'fixed';
-  videoElement.style.width = '300px';
-  videoElement.style.height = '200px';
-  videoElement.style.top = '0';
-  videoElement.style.right = '0';
-  videoElement.style.backgroundColor = "red";
-  videoElement.style.display = 'none';
   videoElement.play();
-  const stream = videoElement.captureStream();
-  return stream;
+  return videoElement.captureStream();
 }
 
 const download = (url) => {
