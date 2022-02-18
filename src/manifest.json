@@ -21,7 +21,6 @@
   ],
   "web_accessible_resources": [
     "main.js",
-    "sample.mp4"
   ],
   "permissions": [
     "tabs",

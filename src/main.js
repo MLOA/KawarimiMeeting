@@ -27,7 +27,6 @@ const stopRecording = () => {
 const createRecordedStream = () => {
   console.log("createRecordedStream");
   const blob = new Blob(recordedChunks, { type: "video/webm" });
-  console.log("blob created")
   const url = URL.createObjectURL(blob);
 
   videoElement.src = url;
@@ -107,7 +106,7 @@ navigator.mediaDevices.enumerateDevices = async function () {
     groupId: "default",
     deviceId: "virtual",
     kind: "videoinput",
-    label: "Shimono 👀👀👀",
+    label: "Loop!!!",
   }
 
   // 仮想デバイスを追加する
