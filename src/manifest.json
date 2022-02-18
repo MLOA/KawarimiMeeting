@@ -1,9 +1,9 @@
 {
-  "name": "かわりみ地蔵",
+  "name": "かわりみミーティング",
   "version": "1.0.0",
-  "manifest_version": 2,
+  "manifest_version": 3,
   "description": "ループ動画を録画してzoomで流せるツール",
-  "browser_action": {
+  "action": {
     "default_popup": "popup.html"
   },
   "content_scripts": [
@@ -19,7 +19,13 @@
     }
   ],
   "web_accessible_resources": [
-    "main.js"
+    {
+      "resources": [
+        "main.js"
+      ],
+      "matches": [],
+      "extension_ids": []
+    }
   ],
   "permissions": [
     "tabs"
