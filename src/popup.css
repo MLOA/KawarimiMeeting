@@ -1,4 +1,84 @@
-video {
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+body {
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  background-color: #f0e7db;
+  color: #1a202c;
+}
+
+.record-area {
+  aspect-ratio: 16 / 9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.circle {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  border: 6px solid gray;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.circle:hover {
+  opacity: 0.9;
+}
+
+.indicator {
+  background: #e73647;
+  width: 90%;
+  height: 90%;
+  border-radius: 50%;
+}
+
+.indicator.recording {
+  width: 50%;
+  height: 50%;
+  border-radius: 4px;
+  transition: width 0.2s ease-out, height 0.2s ease-out,
+    border-radius 0.2s ease-out;
+}
+
+.indicator.stopping {
+  transition: width 0.2s ease-out, height 0.2s ease-out,
+    border-radius 0.2s ease-out;
+}
+
+.preview-area {
+  aspect-ratio: 4 / 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: gray;
+}
+
+.preview-video {
   width: 100%;
-  height: auto;
+  object-fit: contain;
+}
+
+@media (prefers-color-scheme: dark) {
+  main {
+    background-color: #202023;
+    color: white;
+  }
+  .circle {
+    border-color: white;
+  }
+  .preview-area {
+    background-color: black;
+  }
 }

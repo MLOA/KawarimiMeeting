@@ -5,19 +5,28 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-    <style>
-      body {
-        width: 300px;
-      }
-    </style>
     <link rel="stylesheet" href="./popup.css" />
     <script src="./popup.js" defer></script>
   </head>
 
   <body>
-    <p>
-      <button class="record">Start Record</button>
-    </p>
+    <main>
+      <section class="record-area">
+        <div class="circle" role="button">
+          <div class="indicator"></div>
+        </div>
+      </section>
+      <section class="preview-area">
+        <video
+          class="preview-video"
+          autoplay
+          loop
+          muted
+          controls
+          src="https://samplelib.com/lib/preview/mp4/sample-5s.mp4"
+        ></video>
+      </section>
+    </main>
     <p>
       <button class="video-play">play</button>
       <button class="video-stop">stop</button>
