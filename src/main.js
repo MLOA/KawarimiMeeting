@@ -15,12 +15,12 @@ const startRecording = () => {
   const options = { mimeType: "video/webm; codecs=vp9" };
   mediaRecorder = new MediaRecorder(streamToRecord, options);
   mediaRecorder.ondataavailable = (event) => {
-    console.log("data-available");
+    // console.log("data-available");
     if (event.data.size > 0) {
       recordedChunks.push(event.data);
     }
   };
-  mediaRecorder.start(3000);
+  mediaRecorder.start(100);
 }
 
 const stopRecording = () => {
