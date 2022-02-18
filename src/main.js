@@ -79,28 +79,33 @@ navigator.mediaDevices.getUserMedia = async function (constraints) {
   })
 };
 
-// 元々の`enumerateDevices()`を保持しておく
-const _enumerateDevices = navigator.mediaDevices.enumerateDevices.bind(
-  navigator.mediaDevices
-);
+let deviceAdded = false;
+const addEnumerateDevice = () => {
+  // 元々の`enumerateDevices()`を保持しておく
+  const _enumerateDevices = navigator.mediaDevices.enumerateDevices.bind(
+    navigator.mediaDevices
+  );
 
-// `enumerateDevices()`を上書きする
-navigator.mediaDevices.enumerateDevices = async function () {
-  // 使用できるデバイス(マイク・カメラなど)を取得する
-  const devices = await _enumerateDevices()
+  // `enumerateDevices()`を上書きする
+  navigator.mediaDevices.enumerateDevices = async function () {
+    // 使用できるデバイス(マイク・カメラなど)を取得する
+    const devices = await _enumerateDevices()
 
-  // 仮想デバイスの情報を定義
-  const virtualDevice = {
-    groupId: "default",
-    deviceId: "virtual",
-    kind: "videoinput",
-    label: "Loop!!!",
+    // 仮想デバイスの情報を定義
+    const virtualDevice = {
+      groupId: "default",
+      deviceId: "virtual",
+      kind: "videoinput",
+      label: "Loop!!!",
+    }
+
+    // 仮想デバイスを追加する
+    devices.push({ ...virtualDevice, toJSON: () => ({ ...virtualDevice }) });
+
+    return devices;
   }
 
-  // 仮想デバイスを追加する
-  devices.push({ ...virtualDevice, toJSON: () => ({ ...virtualDevice }) });
-
-  return devices;
+  deviceAdded = true;
 }
 
 const transitStartRecButton = document.querySelector(".transit-start-rec");
@@ -114,4 +119,5 @@ transitEndRecButton.addEventListener('click', () => {
   console.log('main: transitEndRecButton');
   stopRecording();
   attachVideo();
+  if(!deviceAdded) addEnumerateDevice();
 });
