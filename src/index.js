@@ -7,7 +7,7 @@
 window.onload = () => {
   const script = document.createElement("script");
   script.setAttribute("type", "module");
-  script.setAttribute("src", chrome.extension.getURL("main.js"));
+  script.setAttribute("src", chrome.runtime.getURL("main.js"));
 
   const head =
     document.head ||
