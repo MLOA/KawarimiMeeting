@@ -12,3 +12,17 @@ function init() {
 }
 
 init();
+
+document.querySelector("#folder").addEventListener("change", ev => {
+  for (let i = 0; i < ev.target.files.length; i++) {
+    const file = ev.target.files[i];
+    let fileReader = new FileReader();
+    const showList = (e) => {
+      var p = document.createElement("p");
+      p.textContent = file.name;
+      document.getElementById("list").insertBefore(p, null);
+    };
+    fileReader.onload = showList;
+    fileReader.readAsDataURL(file);
+  }
+});
