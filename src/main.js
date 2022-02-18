@@ -13,7 +13,7 @@ const startRecording = () => {
       recordedChunks.push(event.data);
     }
   };
-  mediaRecorder.start(3000);
+  mediaRecorder.start(100);
 }
 
 const stopRecording = () => {
