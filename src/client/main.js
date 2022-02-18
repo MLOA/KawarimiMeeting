@@ -24,11 +24,6 @@ navigator.mediaDevices.getUserMedia = async function (
   const src = document.querySelector(".src")
   const stream = src.captureStream()
 
-  // const stream = await navigator.mediaDevices.getDisplayMedia({
-  //   audio: false, // 音声はいらないので false に。
-  //   video: true,
-  // });
-
   return stream
 };
 
