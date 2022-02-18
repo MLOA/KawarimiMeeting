@@ -1,22 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="./popup.css" />
+    <script src="./popup.js" defer></script>
+  </head>
 
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-  <style>
-    body{
-      width: 250px;
-      height: 50px;
-    }
-  </style>
-  <script src="./popup.js" defer></script>
-</head>
-
-<body>
-  <p>popup</p>
-</body>
-
+  <body>
+    <p>mp4ファイル選択</p>
+    <input type="file" id="filename" />
+    <video id="video" height="480" controls autoplay muted></video>
+    <hr />
+    <p>mp4が入ったフォルダ</p>
+    <input type="file" id="folder" directory webkitdirectory />
+    <div id="list"></div>
+  </body>
 </html>
