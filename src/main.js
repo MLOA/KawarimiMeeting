@@ -75,7 +75,7 @@ const addEnumerateDevice = () => {
       groupId: "default",
       deviceId: "virtual",
       kind: "videoinput",
-      label: "††† かわりみ地蔵 †††",
+      label: "かわりみミーティング",
     }
     devices.push({ ...virtualDevice, toJSON: () => ({ ...virtualDevice }) });
 

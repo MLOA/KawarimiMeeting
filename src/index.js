@@ -54,7 +54,7 @@ window.onload = () => {
     } else if (actionType === "video-play") {
       // isExistDeviceList 条件追加
       const virtualDevice = Array.from(document.querySelectorAll('.video-option-menu__pop-menu li > a'))
-        .filter((s) => { return s.textContent === "††† かわりみ地蔵 †††" })[0];
+        .filter((s) => { return s.textContent === "かわりみミーティング" })[0];
       if( virtualDevice && isExistDeviceList ) virtualDevice.click();
     } else if (actionType === "video-stop") {
       // isExistDeviceList 条件
