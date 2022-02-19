@@ -57,12 +57,31 @@ main {
     border-radius 0.2s ease-out;
 }
 
+.play-area {
+  padding: 10px;
+  min-height: 30px;
+}
+
+.video-play, .video-stop {
+  text-align: center;
+  padding: 10px;
+  border-radius: 30px;
+  cursor: pointer;
+  box-sizing: border-box;
+  text-align: center;
+  font-weight: bold;
+}
+
+.video-play:hover, .video-stop:hover {
+  opacity: 0.9;
+}
+
 .preview-area {
-  aspect-ratio: 4 / 3;
   display: flex;
   align-items: center;
   justify-content: center;
   background-color: gray;
+  vertical-align: bottom;
 }
 
 .preview-video {
@@ -77,6 +96,10 @@ main {
   }
   .circle {
     border-color: white;
+  }
+  .video-play, .video-stop {
+    background-color: white;
+    color: black;
   }
   .preview-area {
     background-color: black;

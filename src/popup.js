@@ -5,6 +5,7 @@
  */
 
 let isRecording = false;
+let isPlaying = false;
 
 const ACTION_TYPE = { START_REC: "start-rec", END_REC: "end-rec" };
 
@@ -14,10 +15,14 @@ const sendData = (actionType) => {
   });
 }
 
+const recordArea = document.querySelector(".record-area");
 const recordButton = document.querySelector(".circle");
 const indicator = document.querySelector(".indicator");
 const preview = document.querySelector(".preview-area");
 const previewVideo = document.querySelector(".preview-video");
+const playArea = document.querySelector(".play-area");
+const playButton = document.querySelector(".video-play");
+const stopButton = document.querySelector(".video-stop");
 
 recordButton.addEventListener("click", (ev) => {
   isRecording = !isRecording;
@@ -26,7 +31,9 @@ recordButton.addEventListener("click", (ev) => {
     sendData(ACTION_TYPE.START_REC);
     indicator.classList.remove("stopping");
     indicator.classList.add("recording");
+    // 録画中はpreviewもplayボタンも見せない
     preview.style.display = "none";
+    playArea.style.display = "none";
   } else {
     sendData(ACTION_TYPE.END_REC);
     indicator.classList.remove("recording");
@@ -34,21 +41,33 @@ recordButton.addEventListener("click", (ev) => {
   }
 });
 
-document.querySelector(".video-play").addEventListener("click", (ev) => {
+playButton.addEventListener("click", (ev) => {
   chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
     chrome.tabs.sendMessage(tabs[0].id, { actionType: "video-play" });
+    recordArea.style.display = "none";
+    playButton.style.display = "none";
+    stopButton.style.display = "block";
+    isPlaying = true;
   });
 });
 
-document.querySelector(".video-stop").addEventListener("click", (ev) => {
+stopButton.addEventListener("click", (ev) => {
   chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
     chrome.tabs.sendMessage(tabs[0].id, { actionType: "video-stop" });
+    // かわりみ終了後はstopButtonを隠し、recordとplayボタンを見せる
+    stopButton.style.display = "none";
+    recordArea.style.display = "flex";
+    playButton.style.display = "block";
+    isPlaying = false;
   });
 });
 
 chrome.runtime.onMessage.addListener((request) => {
   if (request.actionType === "recorded") {
     previewVideo.src = request.videoSrc;
-    preview.style.display = "initial";
+    // 録画終了後はpreviewとplayボタンを見せる
+    preview.style.display = "block";
+    playButton.style.display = "block";
+    playArea.style.display = "block";
   }
 });
