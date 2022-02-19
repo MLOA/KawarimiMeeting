@@ -40,13 +40,15 @@ const attachVideo = () => {
   console.log("attachVideo start");
   const blob = new Blob([...recordedChunks], { type: "video/webm" });
   const url = URL.createObjectURL(blob);
-  console.log(url)
   videoElement = document.createElement('video');
   videoElement.autoplay = true;
   videoElement.muted = true;
   videoElement.loop = true;
   videoElement.style.display = 'none';
   videoElement.src = url;
+  const transitRecordedButton = document.querySelector(".transit-recorded");
+  transitRecordedButton.textContent = url;
+  transitRecordedButton.click();
   document.body.insertBefore(videoElement, document.body.lastChild)
   console.log("attachVideo end");
 }

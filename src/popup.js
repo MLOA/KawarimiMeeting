@@ -17,6 +17,7 @@ const sendData = (actionType) => {
 const recordButton = document.querySelector(".circle");
 const indicator = document.querySelector(".indicator");
 const preview = document.querySelector(".preview-area");
+const previewVideo = document.querySelector(".preview-video");
 
 recordButton.addEventListener("click", (ev) => {
   isRecording = !isRecording;
@@ -30,7 +31,6 @@ recordButton.addEventListener("click", (ev) => {
     sendData(ACTION_TYPE.END_REC);
     indicator.classList.remove("recording");
     indicator.classList.add("stopping");
-    preview.style.display = "initial";
   }
 });
 
@@ -44,4 +44,11 @@ document.querySelector(".video-stop").addEventListener("click", (ev) => {
   chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
     chrome.tabs.sendMessage(tabs[0].id, { actionType: "video-stop" });
   });
+});
+
+chrome.runtime.onMessage.addListener((request) => {
+  if (request.actionType === "recorded") {
+    previewVideo.src = request.videoSrc;
+    preview.style.display = "initial";
+  }
 });

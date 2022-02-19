@@ -30,18 +30,33 @@ window.onload = () => {
   transitEndRecButton.style.display = "none";
   document.body.insertBefore(transitEndRecButton, document.body.lastChild);
 
-  let isExistDeviceList = false
+  // recordEndイベントを経由させるためのボタン
+  const transitRecordedButton = document.createElement("button");
+  transitRecordedButton.classList.add("transit-recorded");
+  transitRecordedButton.style.display = "none";
+  document.body.insertBefore(transitRecordedButton, document.body.lastChild);
+  transitRecordedButton.addEventListener("click", () => {
+    // popupへdataUrlを伝える
+    chrome.runtime.sendMessage({
+      actionType: "recorded",
+      videoSrc: transitRecordedButton.textContent,
+    });
+  });
+
+  let isExistDeviceList = false;
   const checkButton = () => {
-    if (Array.from(document.querySelectorAll('.video-option-menu > button')).length !== 0){
-      document.querySelectorAll('.video-option-menu > button')[0].click()
-      isExistDeviceList = true
+    if (
+      Array.from(document.querySelectorAll(".video-option-menu > button"))
+        .length !== 0
+    ) {
+      document.querySelectorAll(".video-option-menu > button")[0].click();
+      isExistDeviceList = true;
     } else {
       setTimeout(() => {
-        checkButton()
+        checkButton();
       }, 500);
     }
-  }
-
+  };
 
   chrome.runtime.onMessage.addListener((request) => {
     // console.log(request);
@@ -53,14 +68,19 @@ window.onload = () => {
       checkButton();
     } else if (actionType === "video-play") {
       // isExistDeviceList 条件追加
-      const virtualDevice = Array.from(document.querySelectorAll('.video-option-menu__pop-menu li > a'))
-        .filter((s) => { return s.textContent === "かわりみミーティング" })[0];
-      if( virtualDevice && isExistDeviceList ) virtualDevice.click();
+      const virtualDevice = Array.from(
+        document.querySelectorAll(".video-option-menu__pop-menu li > a")
+      ).filter((s) => {
+        return s.textContent === "かわりみミーティング";
+      })[0];
+      if (virtualDevice && isExistDeviceList) virtualDevice.click();
     } else if (actionType === "video-stop") {
       // isExistDeviceList 条件
-      const deviceList = Array.from(document.querySelectorAll('.video-option-menu__pop-menu li > a'));
-      const defaultDevice = deviceList[deviceList.length -2]
-      if( defaultDevice && isExistDeviceList ) defaultDevice.click();
+      const deviceList = Array.from(
+        document.querySelectorAll(".video-option-menu__pop-menu li > a")
+      );
+      const defaultDevice = deviceList[deviceList.length - 2];
+      if (defaultDevice && isExistDeviceList) defaultDevice.click();
     }
   });
 };
