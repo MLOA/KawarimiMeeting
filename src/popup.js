@@ -83,14 +83,22 @@ chrome.runtime.onMessage.addListener((request) => {
 const init = () => {
   const isPlaying = localStorage.getItem(LOCAL_STORAGE_KEYS.IS_PLAYING);
   const videoSrc = localStorage.getItem(LOCAL_STORAGE_KEYS.VIDEO_SRC);
-  document.querySelector('#info').textContent = `isPlaying: ${isPlaying} videoSrc: ${videoSrc}`;
 
-  if (isPlaying) {
+  if (isPlaying === 'true') {
     setSystemStatus(SYSTEM_STATUS.PLAYING);
   }
   if (videoSrc) {
     previewVideo.src = videoSrc;
     preview.style.display = "block";
+
+    if (isPlaying === 'true') {
+      playButton.style.display = "none";
+      stopButton.style.display = "block";
+    } else {
+      playButton.style.display = "block";
+      stopButton.style.display = "none";
+    }
+    playArea.style.display = "block";
   }
 };
 
