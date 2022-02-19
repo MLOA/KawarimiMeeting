@@ -113,5 +113,11 @@ chrome.runtime.onMessage.addListener((request) => {
   if (request.actionType === "recorded") {
     previewVideo.src = request.videoSrc;
     localStorage.setItem(LOCAL_STORAGE_KEYS.VIDEO_SRC, request.videoSrc);
+  } else if(request.actionType === "init") {
+    localStorage.clear();
   }
+});
+
+chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+  chrome.tabs.sendMessage(tabs[0].id, { actionType: "init" });
 });

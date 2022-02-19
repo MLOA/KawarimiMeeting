@@ -58,6 +58,7 @@ window.onload = () => {
     }
   };
 
+  let isStorageInitialized = false;
   chrome.runtime.onMessage.addListener((request) => {
     // console.log(request);
     const { actionType } = request;
@@ -81,6 +82,12 @@ window.onload = () => {
       );
       const defaultDevice = deviceList[deviceList.length - 2];
       if (defaultDevice && isExistDeviceList) defaultDevice.click();
+    } else if(actionType === "init") {
+      if(isStorageInitialized) return;
+      chrome.runtime.sendMessage({
+        actionType: "init",
+      })
+      isStorageInitialized = true;
     }
   });
 };
