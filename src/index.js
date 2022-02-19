@@ -30,6 +30,19 @@ window.onload = () => {
   transitEndRecButton.style.display = "none";
   document.body.insertBefore(transitEndRecButton, document.body.lastChild);
 
+  let isExistDeviceList = false
+  const checkButton = () => {
+    if (Array.from(document.querySelectorAll('.video-option-menu > button')).length !== 0){
+      document.querySelectorAll('.video-option-menu > button')[0].click()
+      isExistDeviceList = true
+    } else {
+      setTimeout(() => {
+        checkButton()
+      }, 500);
+    }
+  }
+  
+
   chrome.runtime.onMessage.addListener((request) => {
     // console.log(request);
     const { actionType } = request;
@@ -37,17 +50,17 @@ window.onload = () => {
       transitStartRecButton.click();
     } else if (actionType === "end-rec") {
       transitEndRecButton.click();
+      checkButton();
     } else if (actionType === "video-play") {
+      // isExistDeviceList 条件追加
       const virtualDevice = Array.from(document.querySelectorAll('.video-option-menu__pop-menu li > a'))
-        .filter((s) => { return s.textContent === "Loop!!!" })[0];
-      // 1回でも表示しないと操作できないぽい
-      // document.querySelectorAll('.video-option-menu > button')[0].click()
-      virtualDevice.click();
+        .filter((s) => { return s.textContent === "††† かわりみ地蔵 †††" })[0];
+      if( virtualDevice && isExistDeviceList ) virtualDevice.click();
     } else if (actionType === "video-stop") {
+      // isExistDeviceList 条件
       const deviceList = Array.from(document.querySelectorAll('.video-option-menu__pop-menu li > a'));
       const defaultDevice = deviceList[deviceList.length -2]
-      // document.querySelectorAll('.video-option-menu > button')[0].click()
-      defaultDevice.click();
+      if( defaultDevice && isExistDeviceList ) defaultDevice.click();
     }
   });
 };
