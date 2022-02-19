@@ -57,3 +57,5 @@ Chrome 拡張はブラウザの右上に出ます（出てない場合はジク�
   - Chrome の API（getUserMedia, enumerateDevices）をハックしている
     - リアルタイムにカメラのビデオをキャプチャし，その場でループ動画を作成
     - 仮想カメラとして Zoom から読み込み・設定できるようにした
+
+![かわりミーティングが追加された様子](./docs/img//added-virtual-camera.png)
