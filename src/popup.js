@@ -1,5 +1,5 @@
 /**
- * かわりミーティング
+ * かわりみミーティング
  * popup.js
  * Copyright © 2022 意識中くらい. All rights reserved.
  */
