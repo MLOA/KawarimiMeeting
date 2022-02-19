@@ -1,5 +1,5 @@
 /**
- * かわりミーティング
+ * かわりみミーティング
  * main.js
  * Copyright © 2022 意識中くらい. All rights reserved.
  */
@@ -77,7 +77,7 @@ const addEnumerateDevice = () => {
       groupId: "default",
       deviceId: "virtual",
       kind: "videoinput",
-      label: "かわりミーティング",
+      label: "かわりみミーティング",
     }
     devices.push({ ...virtualDevice, toJSON: () => ({ ...virtualDevice }) });
 
