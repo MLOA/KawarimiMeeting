@@ -11,9 +11,6 @@ const LOCAL_STORAGE_KEYS = {
 };
 const SYSTEM_STATUS = { IDLE: 1, RECORDING: 2, PLAYING: 3 };
 
-const isPlaying = localStorage.getItem(LOCAL_STORAGE_KEYS.IS_PLAYING);
-const videoSrc = localStorage.getItem(LOCAL_STORAGE_KEYS.VIDEO_SRC);
-
 let systemStatus = SYSTEM_STATUS.IDLE;
 
 const sendData = (actionType) => {
@@ -71,9 +68,23 @@ const setSystemStatus = (nextSystemStatus) => {
   }
 };
 
-document.querySelector('#info').textContent = `isPlaying: ${isPlaying} videoSrc: ${videoSrc}`;
+chrome.runtime.onMessage.addListener((request) => {
+  if (request.actionType === "recorded") {
+    previewVideo.src = request.videoSrc;
+    localStorage.setItem(LOCAL_STORAGE_KEYS.VIDEO_SRC, request.videoSrc);
+  } else if(request.actionType === "initWithRefresh") {
+    localStorage.clear();
+    init();
+  } else if(request.actionType === "init") {
+    init();
+  }
+});
 
 const init = () => {
+  const isPlaying = localStorage.getItem(LOCAL_STORAGE_KEYS.IS_PLAYING);
+  const videoSrc = localStorage.getItem(LOCAL_STORAGE_KEYS.VIDEO_SRC);
+  document.querySelector('#info').textContent = `isPlaying: ${isPlaying} videoSrc: ${videoSrc}`;
+
   if (isPlaying) {
     setSystemStatus(SYSTEM_STATUS.PLAYING);
   }
@@ -83,7 +94,9 @@ const init = () => {
   }
 };
 
-init();
+chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+  chrome.tabs.sendMessage(tabs[0].id, { actionType: "init" });
+});
 
 recordButton.addEventListener("click", (ev) => {
   if (systemStatus === SYSTEM_STATUS.IDLE) {
@@ -109,15 +122,3 @@ stopButton.addEventListener("click", (ev) => {
   });
 });
 
-chrome.runtime.onMessage.addListener((request) => {
-  if (request.actionType === "recorded") {
-    previewVideo.src = request.videoSrc;
-    localStorage.setItem(LOCAL_STORAGE_KEYS.VIDEO_SRC, request.videoSrc);
-  } else if(request.actionType === "init") {
-    localStorage.clear();
-  }
-});
-
-chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-  chrome.tabs.sendMessage(tabs[0].id, { actionType: "init" });
-});

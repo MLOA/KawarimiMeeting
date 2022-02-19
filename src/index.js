@@ -83,11 +83,16 @@ window.onload = () => {
       const defaultDevice = deviceList[deviceList.length - 2];
       if (defaultDevice && isExistDeviceList) defaultDevice.click();
     } else if(actionType === "init") {
-      if(isStorageInitialized) return;
-      chrome.runtime.sendMessage({
-        actionType: "init",
-      })
-      isStorageInitialized = true;
+      if(isStorageInitialized) {
+        chrome.runtime.sendMessage({
+          actionType: "init",
+        })
+      } else {
+        chrome.runtime.sendMessage({
+          actionType: "initWithRefresh",
+        })
+        isStorageInitialized = true;
+      }
     }
   });
 };
