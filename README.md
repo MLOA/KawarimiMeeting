@@ -26,6 +26,10 @@
 
 ### 1. Chrome Web Store から「かわりみミーティング」をインストール
 
+**現在Storeの承認待ち状態となっております**
+
+お手数ですが次の方法でインストールしてください 🙇 
+
 1. [Release](https://github.com/MLOA/tsukuaso/releases)より最新版の.zip を DL してください
 2. [chrome://extensions/](chrome://extensions/)にてデベロッパーモードを有効にしてください
 3. 「パッケージ化されていない拡張機能を読み込む」から DL した.zip を取り込みます
