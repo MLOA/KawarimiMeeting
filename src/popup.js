@@ -1,5 +1,5 @@
 /**
- * みがわり地蔵
+ * かわりミーティング
  * popup.js
  * Copyright © 2022 意識中くらい. All rights reserved.
  */

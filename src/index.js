@@ -1,5 +1,5 @@
 /**
- * みがわり地蔵
+ * かわりミーティング
  * index.js
  * Copyright © 2022 意識中くらい. All rights reserved.
  */
@@ -71,7 +71,7 @@ window.onload = () => {
       const virtualDevice = Array.from(
         document.querySelectorAll(".video-option-menu__pop-menu li > a")
       ).filter((s) => {
-        return s.textContent === "かわりみミーティング";
+        return s.textContent === "かわりミーティング";
       })[0];
       if (virtualDevice && isExistDeviceList) virtualDevice.click();
     } else if (actionType === "video-stop") {
