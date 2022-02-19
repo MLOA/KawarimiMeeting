@@ -74,12 +74,21 @@ const setSystemStatus = (nextSystemStatus) => {
 document.querySelector('#info').textContent = `isPlaying: ${isPlaying} videoSrc: ${videoSrc}`;
 
 const init = () => {
-  if (isPlaying) {
+  if (isPlaying === 'true') {
     setSystemStatus(SYSTEM_STATUS.PLAYING);
   }
   if (videoSrc) {
     previewVideo.src = videoSrc;
     preview.style.display = "block";
+
+    if (isPlaying === 'true') {
+      playButton.style.display = "none";
+      stopButton.style.display = "block";
+    } else {
+      playButton.style.display = "block";
+      stopButton.style.display = "none";
+    }
+    playArea.style.display = "block";
   }
 };
 
