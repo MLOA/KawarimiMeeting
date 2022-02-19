@@ -5,7 +5,14 @@
  */
 
 const ACTION_TYPE = { START_REC: "start-rec", END_REC: "end-rec" };
+const LOCAL_STORAGE_KEYS = {
+  IS_PLAYING: 'kawarimi:is_playing',
+  VIDEO_SRC: 'kawarimi:video_src',
+};
 const SYSTEM_STATUS = { IDLE: 1, RECORDING: 2, PLAYING: 3 };
+
+const isPlaying = localStorage.getItem(LOCAL_STORAGE_KEYS.IS_PLAYING);
+const videoSrc = localStorage.getItem(LOCAL_STORAGE_KEYS.VIDEO_SRC);
 
 let systemStatus = SYSTEM_STATUS.IDLE;
 
@@ -38,6 +45,7 @@ const setSystemStatus = (nextSystemStatus) => {
       playButton.style.display = "block";
       playArea.style.display = "block";
       preview.style.display = "block";
+      localStorage.setItem(LOCAL_STORAGE_KEYS.IS_PLAYING, false);
       break;
     }
     case SYSTEM_STATUS.RECORDING: {
@@ -46,6 +54,7 @@ const setSystemStatus = (nextSystemStatus) => {
       // 録画中はpreviewもplayボタンも見せない
       preview.style.display = "none";
       playArea.style.display = "none";
+      localStorage.setItem(LOCAL_STORAGE_KEYS.IS_PLAYING, false);
       break;
     }
     case SYSTEM_STATUS.PLAYING: {
@@ -54,12 +63,27 @@ const setSystemStatus = (nextSystemStatus) => {
       playButton.style.display = "none";
       stopButton.style.display = "block";
       playArea.style.display = "block";
+      localStorage.setItem(LOCAL_STORAGE_KEYS.IS_PLAYING, true);
       break;
     }
     default:
       break;
   }
 };
+
+document.querySelector('#info').textContent = `isPlaying: ${isPlaying} videoSrc: ${videoSrc}`;
+
+const init = () => {
+  if (isPlaying) {
+    setSystemStatus(SYSTEM_STATUS.PLAYING);
+  }
+  if (videoSrc) {
+    previewVideo.src = videoSrc;
+    preview.style.display = "block";
+  }
+};
+
+init();
 
 recordButton.addEventListener("click", (ev) => {
   if (systemStatus === SYSTEM_STATUS.IDLE) {
@@ -88,5 +112,6 @@ stopButton.addEventListener("click", (ev) => {
 chrome.runtime.onMessage.addListener((request) => {
   if (request.actionType === "recorded") {
     previewVideo.src = request.videoSrc;
+    localStorage.setItem(LOCAL_STORAGE_KEYS.VIDEO_SRC, request.videoSrc);
   }
 });
