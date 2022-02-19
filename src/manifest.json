@@ -23,7 +23,9 @@
       "resources": [
         "main.js"
       ],
-      "matches": [],
+      "matches": [
+        "https://*.zoom.us/*"
+      ],
       "extension_ids": []
     }
   ],
