@@ -34,8 +34,5 @@
       ],
       "extension_ids": []
     }
-  ],
-  "permissions": [
-    "tabs"
   ]
 }
