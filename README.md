@@ -24,15 +24,9 @@
 
 ## 使い方
 
-### 1. Chrome Web Store から「かわりみミーティング」をインストール
+### 1. Chrome ウェブストア から「かわりみミーティング」をインストール
 
-**現在Storeの承認待ち状態となっております**
-
-お手数ですが次の方法でインストールしてください 🙇 
-
-1. [Release](https://github.com/MLOA/tsukuaso/releases)より最新版の.zip を DL してください
-2. [chrome://extensions/](chrome://extensions/)にてデベロッパーモードを有効にしてください
-3. 「パッケージ化されていない拡張機能を読み込む」から DL した.zip を取り込みます
+- [かわりみミーティング - Chrome ウェブストア](https://chrome.google.com/webstore/detail/%E3%81%8B%E3%82%8F%E3%82%8A%E3%81%BF%E3%83%9F%E3%83%BC%E3%83%86%E3%82%A3%E3%83%B3%E3%82%B0/eambcodfdjgfoipcpkohclalfnbjmjol?hl=ja)
 
 ### 2. Chrome で任意の Zoom 会議に参加する
 
